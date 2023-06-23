@@ -1,0 +1,493 @@
+
+POR PAISES
+Carga de paquetes necesarios
+install.packages("readxl")
+install.packages("tidyverse")
+install.packages("ggcorrplot")
+install.packages("tidyverse")
+install.packages("ggplot2")
+install.packages(c("xlsx", "corrplot"))
+install.packages("readxl")
+install.packages("dplyr")
+install.packages("pillar")
+install.packages("Rtools")
+install.packages("corrplot")
+install.packages("gridExtra")
+
+library(gridExtra)
+library(readxl)
+library(dplyr)
+library(xlsx)
+library(corrplot)
+library(graphics)
+library(readxl)
+library(tidyverse)
+library(ggcorrplot)
+
+# Lectura del archivo de Excel y obtención de nombres de hojas
+ruta_excel <- "C:/Users/avgr2/OneDrive - Universidad Pontificia Comillas/TFG/ANALYTICS/EXCEL POR PAISES Traspuesto.xlsx"
+nombres_hojas <- excel_sheets(ruta_excel)
+
+# Bucle para recorrer todas las hojas del archivo y mostrar los correlogramas por separado
+for (hoja in nombres_hojas) {
+  
+  # Lectura de los datos de la hoja actual
+  datos <- read_excel(ruta_excel, sheet = hoja, col_names = TRUE)
+  
+  # Cálculo de la matriz de correlación y creación del correlograma
+  correlaciones <- cor(datos[,1:ncol(datos)], method = "pearson")
+  correlograma <- corrplot(correlaciones, title = hoja)
+  
+
+  
+  # Mostrar el correlograma
+  print(correlograma)
+  
+
+}
+
+
+
+
+españa <- "FIN"
+
+# Leer los datos de la hoja seleccionada
+datosespaña <- read_excel(ruta_excel, sheet = españa, col_names = TRUE)
+
+# Calcular la matriz de correlación
+correlacionesx <- cor(datosespaña[,1:ncol(datosespaña)], method = "pearson")
+
+view(correlacionesx)
+
+# Crear la matriz de correlación con el paquete corrplot
+correlogramaesp <- corrplot(correlaciones, title = "FRA")
+print(correlogramaesp)
+
+ENTERO CORRELACIONES
+library(readxl)
+
+install.packages("tidyverse")
+# Instalar y cargar las librerías necesarias
+install.packages(c("xlsx", "corrplot"))
+install.packages("readxl")
+install.packages("dplyr")
+install.packages("pillar")
+install.packages("Rtools")
+install.packages("corrplot")
+
+library(readxl)
+library(dplyr)
+library(xlsx)
+library(corrplot)
+library(graphics)
+
+EXCEL_POR_PAISES_Traspuesto <- read_excel("C:/Users/avgr2/OneDrive - Universidad Pontificia Comillas/TFG/ANALYTICS/EXCEL TODO EN UNO Traspuesto - LN.xlsx")
+View(EXCEL_POR_PAISES_Traspuesto)
+
+
+str(EXCEL_POR_PAISES_Traspuesto)
+correlacion <- cor(EXCEL_POR_PAISES_Traspuesto,method="pearson")
+head(correlacion)
+corrplot(correlacion)
+
+# Mostrar la matriz de correlación como un correlograma
+corrplot(correlacion, method = "circle", type = "upper", tl.cex = 0.7,
+         title = "Todo en Uno")
+
+mi_paleta <- colorRampPalette(c("blue", "white", "red"))(100)
+# Mostrar la matriz de correlación como un heatmap
+heatmap(correlacion, col = mi_paleta, scale = "none", Rowv = NA, Colv = NA,
+        main = "Todo en Uno")
+
+correlacionsimple <- cor(EXCEL_POR_PAISES_Traspuesto)
+View(correlacionsimple)
+
+MODELO DE REGRESION
+
+archivo3= 'C:/Users/avgr2/OneDrive - Universidad Pontificia Comillas/TFG/ANALYTICS/EXCEL POR PAISES Traspuesto - Panel Data - GDP.xlsx';
+
+tablaGDP= readtable(archivo3);
+
+% Obtener los nombres de las columnas
+nombres_columnas = tablaGDP.Properties.VariableNames;
+% Mostrar la lista de nombres de las columnas
+disp(nombres_columnas);
+
+variablesindependientes= {'Inf', 'Mobil', 'Broad', 'E_Gov', 'Fixed', 'QOL', 'Innov', 'C2', 'D2'};
+
+% Comenzamos con el análisis de modelos. MODELOS FITLME con effectos aleatorios.
+% Módelo Country Aleatorio
+modelo_aleatorio_1 = fitlme(tablaGDP, 'GDP ~ 1 + Inf + Mobil + Broad + E_Gov + Fixed + QOL + Innov + C2 + D2 + (1|Country)');
+
+% Modelo Year Aleatorio
+modelo_aleatorio_2 = fitlme(tablaGDP, 'GDP ~ 1 + Inf + Mobil + Broad + E_Gov + Fixed + QOL + Innov + C2 + D2 + (1|Year)');
+
+%Modelo Year & Country Aleatorio
+modelo_aleatorio_3 = fitlme(tablaGDP, 'GDP ~ 1 + Inf + Mobil + Broad + E_Gov + Fixed + QOL + Innov + C2 + D2 + (1|Year) + (1|Country)');
+
+% Proseguimos con el cálculo de Modelo con efectos fijos
+% Modelo Country Fijo
+modelo_fijo_1 = fitlme(tablaGDP, 'GDP ~ 1 + Inf + Mobil + Broad + E_Gov + Fixed + QOL + Innov + C2 + D2 + Country');
+
+
+%Modelo Year Fijo
+modelo_fijo_2 = fitlme(tablaGDP, 'GDP ~ 1 + Inf + Mobil + Broad + E_Gov + Fixed + QOL + Innov + C2 + D2 + Year');
+
+%Modelo Year & Country Fijos
+modelo_fijo_3 = fitlme(tablaGDP, 'GDP ~ 1 + Inf + Mobil + Broad + E_Gov + Fixed + QOL + Innov + C2 + D2 + Year + Country');
+
+% Variables independientes
+variablesindependientes = {'Inf', 'Mobil', 'Broad', 'E_Gov', 'Fixed', 'QOL', 'Innov', 'C2', 'D2'};
+
+% Variables independientes
+variablesindependientes = {'Inf', 'Mobil', 'Broad', 'E_Gov', 'Fixed', 'QOL', 'Innov', 'C2', 'D2'};
+
+% Estructura para almacenar los modelos
+modelos = struct();
+
+% Inicializar variables para el mejor AIC y el mejor modelo
+mejor_AIC = Inf;
+mejor_modelo = [];
+
+% Bucle para ajustar los modelos
+for i = 1:length(variablesindependientes)
+    % Variable independiente actual
+    variable_actual = variablesindependientes{i};
+    
+    % Modelo con Country y Year fijos
+    formula = ['GDP ~ 1 + ', variable_actual, ' + Country + Year'];
+    modelo_actual = fitlme(tablaGDP, formula);
+    
+    % Obtener el AIC del modelo actual
+    AIC_actual = modelo_actual.ModelCriterion.AIC;
+    
+    % Actualizar el mejor modelo si el AIC actual es menor
+    if AIC_actual < mejor_AIC
+        mejor_AIC = AIC_actual;
+        mejor_modelo = modelo_actual;
+    end
+    
+    % Almacenar el modelo en la estructura
+    modelos.(variable_actual) = modelo_actual;
+end
+
+% Mostrar el mejor modelo
+disp(mejor_modelo);
+
+
+%SEGUNDA TANDA
+
+% Variables independientes
+variablesindependientes2 = {'Inf', 'Mobil', 'Broad', 'E_Gov', 'Fixed', 'QOL', 'Innov', 'D2'};
+
+% Estructura para almacenar los modelos
+modelos2 = struct();
+
+% Inicializar variables para el mejor AIC y el mejor modelo
+mejor_AIC2 = Inf;
+mejor_modelo2 = [];
+
+% Bucle para ajustar los modelos
+for i = 1:length(variablesindependientes2)
+    % Variable independiente actual
+    variable_actual2 = variablesindependientes2{i};
+    
+    % Modelo con Country y Year fijos
+    formula2 = ['GDP ~ 1 + ', variable_actual2, ' + C2 + Country + Year'];
+    modelo_actual2 = fitlme(tablaGDP, formula2);
+    
+    % Obtener el AIC del modelo actual
+    AIC_actual2 = modelo_actual2.ModelCriterion.AIC;
+    
+    % Actualizar el mejor modelo si el AIC actual es menor
+    if AIC_actual2 < mejor_AIC2
+        mejor_AIC2 = AIC_actual2;
+        mejor_modelo2 = modelo_actual2;
+    end
+    
+    % Almacenar el modelo en la estructura
+    modelos3.(variable_actual2) = modelo_actual2;
+end
+
+% Mostrar el mejor modelo
+disp(mejor_modelo2);
+
+
+%TERCERA TANDA
+
+% Variables independientes
+variablesindependientes3 = {'Inf', 'Mobil', 'Broad', 'E_Gov', 'Fixed', 'QOL', 'Innov'};
+
+% Estructura para almacenar los modelos
+modelos3 = struct();
+
+% Inicializar variables para el mejor AIC y el mejor modelo
+mejor_AIC3 = Inf;
+mejor_modelo3 = [];
+
+% Bucle para ajustar los modelos
+for i = 1:length(variablesindependientes3)
+    % Variable independiente actual
+    variable_actual3 = variablesindependientes3{i};
+    
+    % Modelo con Country y Year fijos
+    formula3 = ['GDP ~ 1 + ', variable_actual3, ' + C2 + D2 + Country + Year'];
+    modelo_actual3 = fitlme(tablaGDP, formula3);
+    
+    % Obtener el AIC del modelo actual
+    AIC_actual3 = modelo_actual3.ModelCriterion.AIC;
+    
+    % Actualizar el mejor modelo si el AIC actual es menor
+    if AIC_actual3 < mejor_AIC3
+        mejor_AIC3 = AIC_actual3;
+        mejor_modelo3 = modelo_actual3;
+    end
+    
+    % Almacenar el modelo en la estructura
+    modelos3.(variable_actual3) = modelo_actual3;
+end
+
+% Mostrar el mejor modelo
+disp(mejor_modelo3);
+
+
+
+%CUARTA TANDA
+
+% Variables independientes
+variablesindependientes4 = {'Inf', 'Mobil', 'Broad', 'QOL', 'Fixed', 'Innov'};
+
+% Estructura para almacenar los modelos
+modelos4 = struct();
+
+% Inicializar variables para el mejor AIC y el mejor modelo
+mejor_AIC4 = Inf;
+mejor_modelo4 = [];
+
+% Bucle para ajustar los modelos
+for i = 1:length(variablesindependientes4)
+    % Variable independiente actual
+    variable_actual4 = variablesindependientes4{i};
+    
+    % Modelo con Country y Year fijos
+    formula4 = ['GDP ~ 1 + ', variable_actual4, ' + E_Gov + C2 + D2 + Country + Year'];
+    modelo_actual4 = fitlme(tablaGDP, formula4);
+    
+    % Obtener el AIC del modelo actual
+    AIC_actual4 = modelo_actual4.ModelCriterion.AIC;
+    
+    % Actualizar el mejor modelo si el AIC actual es menor
+    if AIC_actual4 < mejor_AIC4
+        mejor_AIC4 = AIC_actual4;
+        mejor_modelo4 = modelo_actual4;
+    end
+    
+    % Almacenar el modelo en la estructura
+    modelos4.(variable_actual4) = modelo_actual4;
+end
+
+% Mostrar el mejor modelo
+disp(mejor_modelo4);
+
+
+%QUINTA TANDA
+
+% Variables independientes
+variablesindependientes5 = {'Inf', 'Mobil', 'Broad', 'Fixed', 'Innov'};
+
+% Estructura para almacenar los modelos
+modelos5 = struct();
+
+% Inicializar variables para el mejor AIC y el mejor modelo
+mejor_AIC5 = Inf;
+mejor_modelo5 = [];
+
+% Bucle para ajustar los modelos
+for i = 1:length(variablesindependientes5)
+    % Variable independiente actual
+    variable_actual5 = variablesindependientes5{i};
+    
+    % Modelo con Country y Year fijos
+    formula5 = ['GDP ~ 1 + ', variable_actual5, ' + E_Gov + C2 + D2 + QOL + Country + Year'];
+    modelo_actual5 = fitlme(tablaGDP, formula5);
+    
+    % Obtener el AIC del modelo actual
+    AIC_actual5 = modelo_actual5.ModelCriterion.AIC;
+    
+    % Actualizar el mejor modelo si el AIC actual es menor
+    if AIC_actual5 < mejor_AIC5
+        mejor_AIC5 = AIC_actual5;
+        mejor_modelo5 = modelo_actual5;
+    end
+    
+    % Almacenar el modelo en la estructura
+    modelos5.(variable_actual5) = modelo_actual5;
+end
+
+% Mostrar el mejor modelo
+disp(mejor_modelo5);
+
+
+%SEXTA TANDA
+
+% Variables independientes
+variablesindependientes6 = {'Inf', 'Mobil', 'Broad', 'Innov'};
+
+% Estructura para almacenar los modelos
+modelos6 = struct();
+
+% Inicializar variables para el mejor AIC y el mejor modelo
+mejor_AIC6 = Inf;
+mejor_modelo6 = [];
+
+% Bucle para ajustar los modelos
+for i = 1:length(variablesindependientes6)
+    % Variable independiente actual
+    variable_actual6 = variablesindependientes6{i};
+    
+    % Modelo con Country y Year fijos
+    formula6 = ['GDP ~ 1 + ', variable_actual6, ' + E_Gov + QOL + Fixed + D2 + C2 + Country + Year'];
+    modelo_actual6 = fitlme(tablaGDP, formula6);
+    
+    % Obtener el AIC del modelo actual
+    AIC_actual6 = modelo_actual6.ModelCriterion.AIC;
+    
+    % Actualizar el mejor modelo si el AIC actual es menor
+    if AIC_actual6 < mejor_AIC6
+        mejor_AIC6 = AIC_actual6;
+        mejor_modelo6 = modelo_actual6;
+    end
+    
+    % Almacenar el modelo en la estructura
+    modelos6.(variable_actual6) = modelo_actual6;
+end
+
+% Mostrar el mejor modelo
+disp(mejor_modelo6);
+
+%SEPTIMA TANDA
+
+% Variables independientes
+variablesindependientes7 = {'Inf', 'Broad', 'Innov'};
+
+% Estructura para almacenar los modelos
+modelos7 = struct();
+
+% Inicializar variables para el mejor AIC y el mejor modelo
+mejor_AIC7 = Inf;
+mejor_modelo7 = [];
+
+% Bucle para ajustar los modelos
+for i = 1:length(variablesindependientes7)
+    % Variable independiente actual
+    variable_actual7 = variablesindependientes7{i};
+    
+    % Modelo con Country y Year fijos
+    formula7 = ['GDP ~ 1 + ', variable_actual7, ' + E_Gov + QOL + Fixed + D2 + C2 + Mobil + Country + Year'];
+    modelo_actual7 = fitlme(tablaGDP, formula7);
+    
+    % Obtener el AIC del modelo actual
+    AIC_actual7 = modelo_actual7.ModelCriterion.AIC;
+    
+    % Actualizar el mejor modelo si el AIC actual es menor
+    if AIC_actual7 < mejor_AIC7
+        mejor_AIC7 = AIC_actual7;
+        mejor_modelo7 = modelo_actual7;
+    end
+    
+    % Almacenar el modelo en la estructura
+    modelos7.(variable_actual7) = modelo_actual7;
+end
+
+% Mostrar el mejor modelo
+disp(mejor_modelo7);
+
+modelo_C2 = fitlme(tablaGDP, 'GDP ~ 1 + C2 + Year + Country')
+modelo_D2 = fitlme(tablaGDP, 'GDP ~ 1 + D2 + Year + Country')
+modelo_Innov = fitlme(tablaGDP, 'GDP ~ 1 + Innov + Year + Country')
+modelo_QOL = fitlme(tablaGDP, 'GDP ~ 1 + QOL + Year + Country')
+modelo_Fixed = fitlme(tablaGDP, 'GDP ~ 1 + Fixed + Year + Country')
+modelo_E_Gov = fitlme(tablaGDP, 'GDP ~ 1 + E_Gov + Year + Country')
+modelo_Broad = fitlme(tablaGDP, 'GDP ~ 1 + Broad + Year + Country')
+modelo_Mobil = fitlme(tablaGDP, 'GDP ~ 1 + Mobil + Year + Country')
+modelo_Inf = fitlme(tablaGDP, 'GDP ~ 1 + Inf + Year + Country')
+
+%MODELO FINAL
+modelo_final = fitlme(tablaGDP, 'GDP ~ 1 + E_Gov + Fixed + QOL + C2 + D2 + Year + Country')
+
+
+archivo2= 'C:/Users/avgr2/OneDrive - Universidad Pontificia Comillas/TFG/ANALYTICS/EXCEL POR PAISES Traspuesto - Panel Data - LN.xlsx';
+
+tablaLN= readtable(archivo2);
+
+% Obtener los nombres de las columnas
+nombres_columnas = tablaLN.Properties.VariableNames;
+% Mostrar la lista de nombres de las columnas
+disp(nombres_columnas);
+
+variablesindependientes= {'Inf', 'Mobil', 'Broad', 'Ind2', 'Inclu', 'E_c', 'E_Gov', 'Fixed', 'QOL', 'Innov', 'C2', 'D2'};
+
+% Comenzamos con el análisis de modelos. MODELOS FITLME con effectos aleatorios.
+% Módelo Country Aleatorio
+modelo_aleatorio_1 = fitlme(tablaLN, 'LNGDP ~ 1 + Inf + Mobil + Broad + E_Gov + Fixed + QOL + Innov + C2 + D2 + (1|Country)');
+
+% Modelo Year Aleatorio
+modelo_aleatorio_2 = fitlme(tablaLN, 'LNGDP ~ 1 + Inf + Mobil + Broad + E_Gov + Fixed + QOL + Innov + C2 + D2 + (1|Year)');
+
+%Modelo Year & Country Aleatorio
+modelo_aleatorio_3 = fitlme(tablaLN, 'LNGDP ~ 1 + Inf + Mobil + Broad + E_Gov + Fixed + QOL + Innov + C2 + D2 + (1|Year) + (1|Country)');
+
+% Proseguimos con el cálculo de Modelo con efectos fijos
+% Modelo Country Fijo
+modelo_fijo_1 = fitlme(tablaLN, 'LNGDP ~ 1 + Inf + Mobil + Broad + E_Gov + Fixed + QOL + Innov + C2 + D2 + Country');
+
+
+%Modelo Year Fijo
+modelo_fijo_2 = fitlme(tablaLN, 'LNGDP ~ 1 + Inf + Mobil + Broad + E_Gov + Fixed + QOL + Innov + C2 + D2 + Year');
+
+%Modelo Year & Country Fijos
+modelo_fijo_3 = fitlme(tablaLN, 'LNGDP ~ 1 + Inf + Mobil + Broad + E_Gov + Fixed + QOL + Innov + C2 + D2 + Year + Country');
+
+
+
+archivo= 'C:/Users/avgr2/OneDrive - Universidad Pontificia Comillas/TFG/ANALYTICS/EXCEL POR PAISES Traspuesto - Panel Data.xlsx';
+
+tablaGDPG= readtable(archivo);
+
+% Obtener los nombres de las columnas
+nombres_columnas = tablaGDPG.Properties.VariableNames;
+% Mostrar la lista de nombres de las columnas
+disp(nombres_columnas);
+
+variablesindependientes= {'Inf', 'Mobil', 'Broad', 'Ind2', 'Inclu', 'E_c', 'E_Gov', 'Fixed', 'QOL', 'Innov', 'C2', 'D2'};
+
+% Comenzamos con el análisis de modelos. MODELOS FITLME con effectos aleatorios.
+% Módelo Country Aleatorio
+modelo_aleatorio_1 = fitlme(tablaGDPG, 'GDPG ~ 1 + Inf + Mobil + Broad + E_Gov + Fixed + QOL + Innov + C2 + D2 + (1|Country)');
+
+% Modelo Year Aleatorio
+modelo_aleatorio_2 = fitlme(tablaGDPG, 'GDPG ~ 1 + Inf + Mobil + Broad + E_Gov + Fixed + QOL + Innov + C2 + D2 + (1|Year)');
+
+%Modelo Year & Country Aleatorio
+modelo_aleatorio_3 = fitlme(tablaGDPG, 'GDPG ~ 1 + Inf + Mobil + Broad + E_Gov + Fixed + QOL + Innov + C2 + D2 + (1|Year) + (1|Country)');
+
+% Proseguimos con el cálculo de Modelo con efectos fijos
+% Modelo Country Fijo
+modelo_fijo_1 = fitlme(tablaGDPG, 'GDPG ~ 1 + Inf + Mobil + Broad + E_Gov + Fixed + QOL + Innov + C2 + D2 + Country');
+
+
+%Modelo Year Fijo
+modelo_fijo_2 = fitlme(tablaGDPG, 'GDPG ~ 1 + Inf + Mobil + Broad + E_Gov + Fixed + QOL + Innov + C2 + D2 + Year');
+
+%Modelo Year & Country Fijos
+modelo_fijo_3 = fitlme(tablaGDPG, 'GDPG ~ 1 + Inf + Mobil + Broad + E_Gov + Fixed + QOL + Innov + C2 + D2 + Year + Country');
+
+
+
+
+
+
+
+
+
+
